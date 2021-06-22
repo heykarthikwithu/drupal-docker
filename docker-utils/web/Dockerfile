@@ -16,9 +16,9 @@ COPY config/fpm-pool.conf /tmp/php-fpm.conf.tpl
 COPY config/php.ini /etc/php7/php.ini
 COPY config/php-custom.ini /etc/php7/conf.d/fpm/custom.ini
 COPY config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-COPY config/nginx-selfsigned.crt /etc/nginx/certs
-COPY config/nginx-selfsigned.key /etc/nginx/certs
-COPY config/dhparam.pem /etc/nginx/certs
+COPY config/nginx-selfsigned.crt /etc/nginx/certs/ssl.crt
+COPY config/nginx-selfsigned.key /etc/nginx/certs/ssl.key
+COPY config/dhparam.pem /etc/nginx/certs/dhparam.pem
 RUN mkdir /etc/nginx/snippets
 COPY config/self-signed.conf /etc/nginx/snippets/
 COPY config/ssl-params.conf /etc/nginx/snippets/
@@ -33,15 +33,15 @@ RUN mkdir -p /var/www/html
 WORKDIR /var/www/html
 RUN chmod u+w /var/www/html/
 
-RUN cd /var/www/html
+#RUN cd /var/www/html
 #RUN COMPOSER_MEMORY_LIMIT=-1 composer install -d /var/www/html/
 
-RUN chown -R www-data:www-data /var/log
+RUN chown -R nobody:nobody /var/log
 VOLUME /var/log
-RUN chown -R www-data:www-data /var/www/html/web/sites/default/files
-VOLUME /var/www/html/web/sites/default/files
-RUN chown www-data:www-data /var/www/html/private
+#RUN chown -R nobody:nobody /var/www/html/web/sites/default/files
+#VOLUME /var/www/html/web/sites/default/files
+#RUN chown nobody:nobody /var/www/html/private
 
 EXPOSE 443
 
-CMD ["sh", "docker-run.sh"]
+CMD ["sh", "docker-utils/web/docker-run.sh"]

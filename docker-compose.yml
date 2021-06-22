@@ -13,7 +13,6 @@ services:
     hostname: drupal-docker.local
     volumes:
       - ./:/var/www/html
-    command: bash -c 'useradd -u 1000 www-data; nginx -g "daemon off;" && service nginx start && nginx -s reload'
 
   db:
     image: mysql:5.7
